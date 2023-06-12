@@ -1,0 +1,9 @@
+name: AntiMobBuild
+version: '${project.version}'
+main: org.example.test.antimobbuild.AntiMobBuild
+api-version: 1.16
+author: mardsss
+commands:
+  amb:
+    description: Reload the configuration
+    usage: /amb reload

@@ -1,0 +1,78 @@
+package org.example.test.antimobbuild.listeners;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+
+public class BuildListener implements Listener {
+    private FileConfiguration customConfig;
+    private boolean canCreateIronGolem;
+    private boolean canCreateSnowMan;
+    private boolean canCreateWither;
+    private boolean canCureVillager;
+    private boolean canInfectVillager;
+    private boolean canSpawnSilverFishOnBlocks;
+    private boolean canTransformZombieInDrowned;
+    private boolean canEggSpawn;
+
+    public BuildListener(FileConfiguration config) {
+        updateConfig(config);
+    }
+
+    public void updateConfig(FileConfiguration config) {
+        this.customConfig = config;
+        this.canCreateIronGolem = config.getBoolean("canCreateIronGolem");
+        this.canCreateSnowMan = config.getBoolean("canCreateSnowMan");
+        this.canCreateWither = config.getBoolean("canCreateWither");
+        this.canCureVillager = config.getBoolean("canCureVillager");
+        this.canInfectVillager = config.getBoolean("canInfectVillager");
+        this.canSpawnSilverFishOnBlocks = config.getBoolean("canSpawnSilverFishOnBlocks");
+        this.canTransformZombieInDrowned = config.getBoolean("canTransformZombieInDrowned");
+        this.canEggSpawn = config.getBoolean("canSpawnFromEggs");
+    }
+    @EventHandler
+    public void onCreatureSpawn(CreatureSpawnEvent event) {
+        CreatureSpawnEvent.SpawnReason spawnReason = event.getSpawnReason();
+        EntityType entityType = event.getEntityType();
+
+        if (entityType == EntityType.IRON_GOLEM && spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_IRONGOLEM) {
+            if (!canCreateIronGolem) {
+                event.setCancelled(true);
+                System.out.println("IRON_GOLEM");
+            }
+        } else if (entityType == EntityType.SNOWMAN && spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_SNOWMAN) {
+            if (!canCreateSnowMan) {
+                event.setCancelled(true);
+                System.out.println("SNOWMAN");
+            }
+        } else if (entityType == EntityType.WITHER && spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_WITHER) {
+            if (!canCreateWither) {
+                event.setCancelled(true);
+                System.out.println("WITHER");
+            }
+        } else if (entityType == EntityType.VILLAGER && spawnReason == CreatureSpawnEvent.SpawnReason.CURED) {
+            if (!canCureVillager) {
+                event.setCancelled(true);
+                System.out.println("VILLAGER");
+            }
+        } else if (entityType == EntityType.VILLAGER && spawnReason == CreatureSpawnEvent.SpawnReason.INFECTION) {
+            if (!canInfectVillager) {
+                event.setCancelled(true);
+            }
+        } else if (entityType == EntityType.SILVERFISH && spawnReason == CreatureSpawnEvent.SpawnReason.SILVERFISH_BLOCK) {
+            if (!canSpawnSilverFishOnBlocks) {
+                event.setCancelled(true);
+            }
+        } else if (entityType == EntityType.ZOMBIE && spawnReason == CreatureSpawnEvent.SpawnReason.DROWNED) {
+            if (!canTransformZombieInDrowned) {
+                event.setCancelled(true);
+            }
+        } else if (spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG){
+            if(!canEggSpawn){
+                event.setCancelled(true);
+            }
+        }
+    }
+}
