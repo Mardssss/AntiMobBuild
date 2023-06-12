@@ -15,12 +15,12 @@
 # Set to 'true' to enable broadcasting messages to players
 # when mob spawns are canceled by the plugin.
 # Set to 'false' to disable broadcasting messages to players.
-broadcastMessagesToPlayer: false
+broadcastMessagesToPlayer: true
 
 # Set to 'true' to enable broadcasting messages to the console
 # when mob spawns are canceled by the plugin.
 # Set to 'false' to disable broadcasting messages to the console.
-broadcastMessagesToConsole: false
+broadcastMessagesToConsole: true
 
 # You can configure the entities that can be spawned here
 
@@ -48,10 +48,8 @@ canInfectVillager: false
 # Set to 'false' to prevent Silverfish from spawning.
 canSpawnSilverFishOnBlocks: false
 
-# Set to 'true' to allow the transformation of Zombies into Drowned.
-# Set to 'false' to prevent Zombies from transforming.
-canTransformZombieInDrowned: false
-
 # Set to 'true' to allow mobs to spawn from eggs.
 # Set to 'false' to prevent mobs from spawning from eggs.
 canSpawnFromEggs: false
+exceptions:
+  - WOLF

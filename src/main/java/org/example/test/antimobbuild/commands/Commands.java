@@ -20,7 +20,7 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("amb") && args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+        if (command.getName().equalsIgnoreCase("amb") && args.length == 1 && args[0].equalsIgnoreCase("reload")&& sender.hasPermission("antimobbuild.reload")) {
             // Reload the configuration file
             FileConfiguration customConfig = YamlConfiguration.loadConfiguration(configFile);
             try {

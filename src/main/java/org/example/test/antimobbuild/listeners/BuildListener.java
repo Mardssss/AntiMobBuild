@@ -7,6 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BuildListener implements Listener {
     private FileConfiguration customConfig;
     private boolean canCreateIronGolem;
@@ -15,10 +18,10 @@ public class BuildListener implements Listener {
     private boolean canCureVillager;
     private boolean canInfectVillager;
     private boolean canSpawnSilverFishOnBlocks;
-    private boolean canTransformZombieInDrowned;
-    private boolean canEggSpawn;
+    private boolean canSpawnFromEggs;
     private boolean broadcastMessagesToPlayer;
     private boolean broadcastMessagesToConsole;
+    private List<EntityType> spawnExceptions;
 
     public BuildListener(FileConfiguration config) {
         updateConfig(config);
@@ -32,11 +35,15 @@ public class BuildListener implements Listener {
         this.canCureVillager = config.getBoolean("canCureVillager");
         this.canInfectVillager = config.getBoolean("canInfectVillager");
         this.canSpawnSilverFishOnBlocks = config.getBoolean("canSpawnSilverFishOnBlocks");
-        this.canTransformZombieInDrowned = config.getBoolean("canTransformZombieInDrowned");
-        this.canEggSpawn = config.getBoolean("canSpawnFromEggs");
+        this.canSpawnFromEggs = config.getBoolean("canSpawnFromEggs");
         this.broadcastMessagesToPlayer = config.getBoolean("broadcastMessagesToPlayer");
         this.broadcastMessagesToConsole = config.getBoolean("broadcastMessagesToConsole");
+        // Update spawnExceptions from the config
+        this.spawnExceptions = config.getStringList("exceptions").stream()
+                .map(EntityType::valueOf)
+                .collect(Collectors.toList());
     }
+
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
@@ -103,24 +110,14 @@ public class BuildListener implements Listener {
                     Bukkit.getLogger().info("SILVERFISH spawning is not allowed.");
                 }
             }
-        } else if (entityType == EntityType.ZOMBIE && spawnReason == CreatureSpawnEvent.SpawnReason.DROWNED) {
-            if (!canTransformZombieInDrowned) {
+        } else if (spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG) {
+            if (!canSpawnFromEggs && !spawnExceptions.contains(entityType)) {
                 event.setCancelled(true);
                 if (broadcastMessagesToPlayer) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage("Zombie transformation into Drowned is not allowed."));
+                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage("Mob spawning from spawn eggs "+entityType.toString().toLowerCase()+" is not allowed."));
                 }
                 if (broadcastMessagesToConsole) {
-                    Bukkit.getLogger().info("ZOMBIE transformation into DROWNED is not allowed.");
-                }
-            }
-        } else if (spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG){
-            if(!canEggSpawn){
-                event.setCancelled(true);
-                if (broadcastMessagesToPlayer) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage("Mob spawning from spawn eggs is not allowed."));
-                }
-                if (broadcastMessagesToConsole) {
-                    Bukkit.getLogger().info("Mob spawning from SPAWNER_EGG is not allowed.");
+                    Bukkit.getLogger().info("Mob spawning from spawn eggs "+entityType+toString().toLowerCase()+ " is not allowed");
                 }
             }
         }
