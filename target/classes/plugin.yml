@@ -1,14 +1,16 @@
 name: AntiMobBuild
-version: '1.0-SNAPSHOT'
+version: '2.0-test'
 main: org.example.test.antimobbuild.AntiMobBuild
 api-version: 1.16
 author: Mardssss
 commands:
   amb:
-    description: Do /amb reload
+    description: Reloads the configuration
     usage: /amb reload
     permission: antimobbuild.reload
-
+    aliases: [antimobbuild]
+    tab-completions:
+      - reload
 permissions:
   antimobbuild.reload:
     description: Permission to reload the configuration

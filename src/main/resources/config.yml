@@ -15,41 +15,51 @@
 # Set to 'true' to enable broadcasting messages to players
 # when mob spawns are canceled by the plugin.
 # Set to 'false' to disable broadcasting messages to players.
-broadcastMessagesToPlayer: true
+broadcast-messages-to-player: true
 
 # Set to 'true' to enable broadcasting messages to the console
 # when mob spawns are canceled by the plugin.
 # Set to 'false' to disable broadcasting messages to the console.
-broadcastMessagesToConsole: true
+broadcast-messages-to-console: true
 
 # You can configure the entities that can be spawned here
 
 # Set to 'true' to allow the creation of Iron Golems.
 # Set to 'false' to prevent the creation of Iron Golems.
-canCreateIronGolem: false
+can-create-irongolem: false
 
 # Set to 'true' to allow the creation of Snow Golems.
 # Set to 'false' to prevent the creation of Snow Golems.
-canCreateSnowMan: false
+can-create-snowman: false
 
 # Set to 'true' to allow the creation of Wither Bosses.
 # Set to 'false' to prevent the creation of Wither Bosses.
-canCreateWither: false
+can-create-wither: false
 
 # Set to 'true' to allow the curing of infected Villagers.
 # Set to 'false' to prevent the curing of infected Villagers.
-canCureVillager: false
+can-cure-villager: false
 
 # Set to 'true' to allow Villagers to be infected by zombies.
 # Set to 'false' to prevent Villagers from being infected.
-canInfectVillager: false
+can-infect-villager: false
 
 # Set to 'true' to allow Silverfish to spawn from blocks.
 # Set to 'false' to prevent Silverfish from spawning.
-canSpawnSilverFishOnBlocks: false
+can-spawn-silver-fish-on-blocks: false
 
 # Set to 'true' to allow mobs to spawn from eggs.
 # Set to 'false' to prevent mobs from spawning from eggs.
-canSpawnFromEggs: false
-exceptions:
-  - WOLF
+can-spawn-from-eggs:
+  enabled: true
+  exceptions:
+    - WOLF
+# set to false to enable natural mob spawning
+# set it to true to disable natural mob spawning
+# add exceptions , if you set WOLF as exceptions and natural-mob-spawn is true , only wolf can spawn
+natural-mob-spawn:
+  enabled: true
+  exceptions:
+    - WOLF
+    - ZOMBIE
+    - CREEPER

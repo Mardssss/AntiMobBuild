@@ -5,10 +5,12 @@ api-version: 1.16
 author: Mardssss
 commands:
   amb:
-    description: Do /amb reload
+    description: Reloads the configuration
     usage: /amb reload
     permission: antimobbuild.reload
-
+    aliases: [antimobbuild]
+    tab-completions:
+      - reload
 permissions:
   antimobbuild.reload:
     description: Permission to reload the configuration
