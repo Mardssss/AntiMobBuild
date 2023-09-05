@@ -24,7 +24,7 @@ You can configure Anti Mob Build by editing the `config.yml` file located in the
 
 Here's an example of a basic configuration:
 
-```
+```yaml
 # AntiMobBuild Configuration
 
 ############################################
