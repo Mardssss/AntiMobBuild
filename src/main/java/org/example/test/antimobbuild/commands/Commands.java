@@ -5,38 +5,40 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.example.test.antimobbuild.listeners.BuildListener;
+import org.example.test.antimobbuild.Config;
 
 import java.io.File;
 
 public class Commands implements CommandExecutor {
     private final File configFile;
     private final File messageFile;
-    private final BuildListener buildListener;
 
-    public Commands(File configFile, File messageFile, BuildListener buildListener) {
-        this.configFile = configFile;
-        this.messageFile = messageFile;
-        this.buildListener = buildListener;
+    public Commands(Config config) {
+        this.configFile = config.getConfigFile();
+        this.messageFile = config.getMessageFile();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("amb") && args.length == 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission("antimobbuild.reload")) {
-            // Reload the configuration files
-            FileConfiguration customConfig = YamlConfiguration.loadConfiguration(configFile);
-            FileConfiguration customMessages = YamlConfiguration.loadConfiguration(messageFile);
-
-            try {
-                customConfig.load(configFile);
-                customMessages.load(messageFile);
-                buildListener.updateConfig(customConfig, customMessages);
-                sender.sendMessage("Configuration reloaded successfully.");
-            } catch (Exception e) {
-                sender.sendMessage("Failed to reload configuration.");
-                e.printStackTrace();
-            }
+        if (args.length == 0) {
+            sender.sendMessage("try amb reload");
             return true;
+        }
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("antimobbuild.reload")) {
+                // Reload the configuration files
+                FileConfiguration customConfig = YamlConfiguration.loadConfiguration(configFile);
+                FileConfiguration customMessages = YamlConfiguration.loadConfiguration(messageFile);
+
+                try {
+                    customConfig.load(configFile);
+                    customMessages.load(messageFile);
+                    sender.sendMessage("Configuration reloaded successfully.");
+                } catch (Exception e) {
+                    sender.sendMessage("Failed to reload configuration.");
+                }
+                return true;
+            }
         }
         return false;
     }

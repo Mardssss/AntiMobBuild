@@ -15,12 +15,17 @@
 # Set to 'true' to enable broadcasting messages to players
 # when mob spawns are canceled by the plugin.
 # Set to 'false' to disable broadcasting messages to players.
-broadcast-messages-to-player: true
+broadcast-messages-to-players: true
 
-# Set to 'true' to enable broadcasting messages to the console
+# Set to 'true' to enable log messages to the console
 # when mob spawns are canceled by the plugin.
-# Set to 'false' to disable broadcasting messages to the console.
-broadcast-messages-to-console: true
+# Set to 'false' to disable log messages to the console.
+log-messages-to-console: true
+
+# Set to 'true' to enable messages to the player
+# when mob spawns are canceled by the plugin.
+# Set to 'false' to disable messages to the player.
+message-player: true
 
 # You can configure the entities that can be spawned here
 
