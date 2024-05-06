@@ -36,14 +36,13 @@ public class Config {
         List<NaturalMobSpawnException> exceptions = new ArrayList<>();
         ConfigurationSection section = config.getConfigurationSection("natural-mob-spawn");
         if (section != null) {
-            for (String key : section.getKeys(false)) {
-                ConfigurationSection worldSection = section.getConfigurationSection(key);
+            for (String worldName : section.getKeys(false)) {
+                ConfigurationSection worldSection = section.getConfigurationSection(worldName);
                 if (worldSection == null) {
                     return;
                 }
                 boolean isEnabled = worldSection.getBoolean("enabled");
                 List<String> exceptionsList = worldSection.getStringList("exceptions");
-                String worldName = key; // Assuming the key is the world name
                 exceptions.add(new NaturalMobSpawnException(worldName, exceptionsList, isEnabled));
             }
         }
@@ -55,15 +54,14 @@ public class Config {
         List<SpawnFromEggsException> exceptions = new ArrayList<>();
         ConfigurationSection section = config.getConfigurationSection("can-spawn-from-eggs");
         if (section != null) {
-            for (String key : section.getKeys(false)) {
-                ConfigurationSection exceptionSection = section.getConfigurationSection(key);
-                if (exceptionSection == null) {
+            for (String worldName : section.getKeys(false)) {
+                ConfigurationSection worldSection = section.getConfigurationSection(worldName);
+                if (worldSection == null) {
                     return;
                 }
-                List<String> worlds = exceptionSection.getStringList("worlds");
-                List<String> mobs = exceptionSection.getStringList("mobs");
-                boolean isEnabled = exceptionSection.getBoolean("enabled");
-                exceptions.add(new SpawnFromEggsException(worlds, mobs, isEnabled));
+                boolean isEnabled = worldSection.getBoolean("enabled");
+                List<String> exceptionsList = worldSection.getStringList("exceptions");
+                exceptions.add(new SpawnFromEggsException(worldName, exceptionsList, isEnabled));
             }
         }
         this.spawnFromEggsExceptions = exceptions;
