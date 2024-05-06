@@ -29,6 +29,7 @@ public class Config {
         loadConfig();
         loadMessages();
         naturalMobSpawnExceptions();
+        spawnFromEggsExepetion();
     }
 
     public void naturalMobSpawnExceptions() {
@@ -36,15 +37,19 @@ public class Config {
         ConfigurationSection section = config.getConfigurationSection("natural-mob-spawn");
         if (section != null) {
             for (String key : section.getKeys(false)) {
-                ConfigurationSection exceptionSection = section.getConfigurationSection(key);
-                List<String> worlds = exceptionSection.getStringList("worlds");
-                List<String> mobs = exceptionSection.getStringList("mobs");
-                boolean isEnabled = exceptionSection.getBoolean("enabled");
-                exceptions.add(new NaturalMobSpawnException(worlds, mobs, isEnabled));
+                ConfigurationSection worldSection = section.getConfigurationSection(key);
+                if (worldSection == null) {
+                    return;
+                }
+                boolean isEnabled = worldSection.getBoolean("enabled");
+                List<String> exceptionsList = worldSection.getStringList("exceptions");
+                String worldName = key; // Assuming the key is the world name
+                exceptions.add(new NaturalMobSpawnException(worldName, exceptionsList, isEnabled));
             }
         }
         this.naturalMobSpawnExceptions = exceptions;
     }
+
 
     public void spawnFromEggsExepetion() {
         List<SpawnFromEggsException> exceptions = new ArrayList<>();

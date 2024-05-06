@@ -108,26 +108,30 @@ public class BuildListener implements Listener {
     // Method to check if the spawned entity is exempted from spawning restrictions
 
     /**
-     * Handles Natural spawning of mobs
+     * Handles natural spawning of mobs based on exceptions specified in the configuration.
      *
-     * @param event
+     * @param event The CreatureSpawnEvent triggered when a creature is spawned.
      */
     private void naturalMobSpawn(CreatureSpawnEvent event) {
         EntityType entityType = event.getEntityType();
-        for (NaturalMobSpawnException nt : config.getNaturalMobSpawnExceptions()) {
-            List<String> worlds = nt.getWorlds();
+        List<NaturalMobSpawnException> exceptions = config.getNaturalMobSpawnExceptions();
+
+        for (NaturalMobSpawnException nt : exceptions) {
+            String worldName = nt.getWorld();
             List<String> mobs = nt.getMobs();
             boolean isEnabled = nt.isEnabled();
-            // Check if the current world is in the list of exempted worlds
-            if (worlds.contains(event.getLocation().getWorld().getName())) {
-                // Check if the spawned entity type is in the list of exempted mobs
-                if (mobs.contains(entityType.name())) {
-                    // Check if the exception is enabled
-                    if (isEnabled) {
-                        // If all conditions are met, allow the entity to spawn
-                        return;
+
+            // Check if the event's world matches the world specified in the exception
+            if (event.getLocation().getWorld().getName().equals(worldName)) {
+                // Check if the mob spawning is enabled for this world
+                if (isEnabled) {
+                    // Check if the spawned entity is in the list of exceptions for this world
+                    if (mobs.contains(entityType.name())) {
+                        // Mob spawning is allowed for this world, but this specific mob is an exception
+                        // allow mobs to spawn
                     } else {
-                        // If the exception is not enabled, cancel the entity spawn
+                        // Mob spawning is allowed for this world and this mob is not an exception
+                        // stop mobs from spawning
                         event.setCancelled(true);
                         if (config.isBroadcastMessagesToPlayers()) {
                             event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.naturalSpawnDenied()));
@@ -135,19 +139,12 @@ public class BuildListener implements Listener {
                         if (config.logMessagesToConsole()) {
                             Bukkit.getLogger().info("Spawning of " + entityType + " is not allowed in world " + event.getLocation().getWorld().getName());
                         }
-                        return;
                     }
+                } else {
+                    // Mob spawning is not enabled for this world
+                    return;
                 }
             }
-        }
-
-        // If the entity is not exempted, cancel its spawn and notify players
-        event.setCancelled(true);
-        if (config.isBroadcastMessagesToPlayers()) {
-            event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.naturalSpawnDenied()));
-        }
-        if (config.logMessagesToConsole()) {
-            Bukkit.getLogger().info("Spawning of " + entityType + " is not allowed.");
         }
     }
 }

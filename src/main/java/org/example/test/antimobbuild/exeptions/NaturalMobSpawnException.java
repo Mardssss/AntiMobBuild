@@ -3,18 +3,18 @@ package org.example.test.antimobbuild.exeptions;
 import java.util.List;
 
 public class NaturalMobSpawnException {
-    List<String> worlds;
+    String world;
     List<String> mobs;
     boolean isEnabled;
 
-    public NaturalMobSpawnException(List<String> worlds, List<String> mobs, boolean isEnabled) {
-        this.worlds = worlds;
+    public NaturalMobSpawnException(String world, List<String> mobs, boolean isEnabled) {
+        this.world = world;
         this.mobs = mobs;
         this.isEnabled = isEnabled;
     }
 
-    public List<String> getWorlds() {
-        return worlds;
+    public String getWorld() {
+        return world;
     }
 
     public List<String> getMobs() {
