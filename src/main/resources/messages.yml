@@ -1,8 +1,38 @@
-irongolem-spawn-denied: "§cIrongolem spawn is not allowed"
+# AntiMobBuild Configuration
+
+############################################
+#                                          #
+#            ___     __  ___ ____          #
+#           /   |   /  |/  // __ )         #
+#          / /| |  / /|_/ // __  |         #
+#         / ___ | / /  / // /_/ /          #
+#        /_/  |_|/_/  /_//_____/           #
+#                                          #
+#            AntiMobBuild                  #
+#                                          #
+############################################
+
+# Message displayed when spawning an Iron Golem is denied
+irongolem-spawn-denied: "§cIrongolem spawning is not allowed."
+
+# Message displayed when spawning a Wither is denied
 wither-spawn-denied: "§cWither spawning is not allowed."
+
+# Message displayed when spawning a Snowman is denied
 snowman-spawn-denied: "§cSnowman spawning is not allowed."
+
+# Message displayed when curing a Villager is denied
 villager-cure-denied: "§cVillager curing is not allowed."
+
+# Message displayed when infecting a Villager is denied
 villager-infection-denied: "§cVillager infection is not allowed."
+
+# Message displayed when spawning a Silverfish is denied
 silverfish-spawn-denied: "§cSilverfish spawning is not allowed."
+
+# Message displayed when spawning mobs from eggs is denied
 spawn-from-eggs-denied: "§cSpawning mobs from eggs is not allowed."
-natural-spawn-denied: "§cCan't spawn mobs from natural means."
+
+# Message displayed when spawning mobs through natural means is denied
+natural-spawn-denied: "§cSpawning mobs through natural means is not allowed."
+

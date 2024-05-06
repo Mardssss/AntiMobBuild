@@ -6,7 +6,7 @@
 
     <groupId>org.example.test</groupId>
     <artifactId>AntiMobBuild</artifactId>
-    <version>2.5-test</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <properties>

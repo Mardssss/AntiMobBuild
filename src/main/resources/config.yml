@@ -55,6 +55,7 @@ can-spawn-silver-fish-on-blocks: false
 
 # Set to 'true' to allow mobs to spawn from eggs.
 # Set to 'false' to prevent mobs from spawning from eggs.
+# Add exceptions: if you set WOLF ad as exceptions and natural-mob-spawn is true , only wolf can spawn
 can-spawn-from-eggs:
   worlds:
     - world1:
@@ -62,9 +63,9 @@ can-spawn-from-eggs:
         exceptions:
           - WOLF
 
-# set to false to enable natural mob spawning
-# set it to true to disable natural mob spawning
-# add exceptions , if you set WOLF as exceptions and natural-mob-spawn is true , only wolf can spawn
+# Set to 'false' to enable natural mob spawning
+# Set to 'true' to disable natural mob spawning
+# Add exceptions: if you set WOLF as exceptions and natural-mob-spawn is true , only wolf can spawn
 natural-mob-spawn:
   worlds:
     - world1:
