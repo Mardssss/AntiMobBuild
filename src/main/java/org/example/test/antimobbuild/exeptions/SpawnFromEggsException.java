@@ -13,7 +13,7 @@ public class SpawnFromEggsException {
         this.isEnabled = isEnabled;
     }
 
-    public String getWorlds() {
+    public String getWorld() {
         return world;
     }
 
