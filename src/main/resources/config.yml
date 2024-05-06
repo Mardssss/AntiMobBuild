@@ -63,8 +63,13 @@ can-spawn-from-eggs:
 # set it to true to disable natural mob spawning
 # add exceptions , if you set WOLF as exceptions and natural-mob-spawn is true , only wolf can spawn
 natural-mob-spawn:
-  enabled: true
-  exceptions:
-    - WOLF
-    - ZOMBIE
-    - CREEPER
+  world1:
+    enabled: true
+    exceptions:
+      - ZOMBIE
+      - SKELETON
+  world2:
+    enabled: true
+    exceptions:
+      - SPIDER
+      - CREEPER

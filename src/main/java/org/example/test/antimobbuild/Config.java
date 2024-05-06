@@ -1,10 +1,14 @@
 package org.example.test.antimobbuild;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.example.test.antimobbuild.exeptions.NaturalMobSpawnException;
+import org.example.test.antimobbuild.exeptions.SpawnFromEggsException;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,22 +16,11 @@ public class Config {
     private final AntiMobBuild plugin;
     private final File configFile;
     private final File messageFile;
-    /*
-    private boolean canCreateIronGolem;
-    private boolean canCreateSnowMan;
-    private boolean canCreateWither;
-    private boolean canCureVillager;
-    private boolean canInfectVillager;
-    private boolean canSpawnSilverFishOnBlocks;
-    private boolean canSpawnFromEggs;
-    private boolean broadcastMessagesToPlayer;
-    private boolean broadcastMessagesToConsole;
-    private boolean naturalMobSpawnEnabled;
-    private List<EntityType> naturalSpawnExceptions;
-    private List<EntityType> spawnExceptions;
-    */
     private FileConfiguration config;
     private FileConfiguration messageConfig;
+
+    private List<NaturalMobSpawnException> naturalMobSpawnExceptions;
+    private List<SpawnFromEggsException> spawnFromEggsExceptions;
 
     public Config(AntiMobBuild plugin) {
         this.plugin = plugin;
@@ -35,6 +28,40 @@ public class Config {
         messageFile = new File(plugin.getDataFolder(), "messages.yml");
         loadConfig();
         loadMessages();
+        naturalMobSpawnExceptions();
+    }
+
+    public void naturalMobSpawnExceptions() {
+        List<NaturalMobSpawnException> exceptions = new ArrayList<>();
+        ConfigurationSection section = config.getConfigurationSection("natural-mob-spawn");
+        if (section != null) {
+            for (String key : section.getKeys(false)) {
+                ConfigurationSection exceptionSection = section.getConfigurationSection(key);
+                List<String> worlds = exceptionSection.getStringList("worlds");
+                List<String> mobs = exceptionSection.getStringList("mobs");
+                boolean isEnabled = exceptionSection.getBoolean("enabled");
+                exceptions.add(new NaturalMobSpawnException(worlds, mobs, isEnabled));
+            }
+        }
+        this.naturalMobSpawnExceptions = exceptions;
+    }
+
+    public void spawnFromEggsExepetion() {
+        List<SpawnFromEggsException> exceptions = new ArrayList<>();
+        ConfigurationSection section = config.getConfigurationSection("can-spawn-from-eggs");
+        if (section != null) {
+            for (String key : section.getKeys(false)) {
+                ConfigurationSection exceptionSection = section.getConfigurationSection(key);
+                if (exceptionSection == null) {
+                    return;
+                }
+                List<String> worlds = exceptionSection.getStringList("worlds");
+                List<String> mobs = exceptionSection.getStringList("mobs");
+                boolean isEnabled = exceptionSection.getBoolean("enabled");
+                exceptions.add(new SpawnFromEggsException(worlds, mobs, isEnabled));
+            }
+        }
+        this.spawnFromEggsExceptions = exceptions;
     }
 
     private void loadConfig() {
@@ -147,5 +174,15 @@ public class Config {
 
     public File getMessageFile() {
         return messageFile;
+    }
+    // getters methods
+
+
+    public List<NaturalMobSpawnException> getNaturalMobSpawnExceptions() {
+        return naturalMobSpawnExceptions;
+    }
+
+    public List<SpawnFromEggsException> getSpawnFromEggsExceptions() {
+        return spawnFromEggsExceptions;
     }
 }

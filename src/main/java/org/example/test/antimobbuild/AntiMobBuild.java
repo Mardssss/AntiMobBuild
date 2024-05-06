@@ -28,7 +28,6 @@ public final class AntiMobBuild extends JavaPlugin {
         getLogger().info("*********************************************");
         getLogger().info("test");
 
-
         // Other plugin initialization code
     }
 

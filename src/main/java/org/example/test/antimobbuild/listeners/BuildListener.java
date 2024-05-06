@@ -6,6 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.example.test.antimobbuild.Config;
+import org.example.test.antimobbuild.exeptions.NaturalMobSpawnException;
+
+import java.util.List;
 
 public class BuildListener implements Listener {
     private final Config config;
@@ -94,11 +97,57 @@ public class BuildListener implements Listener {
                     Bukkit.getLogger().info("Mob spawning from spawn eggs "+event.getEntityType().name().toLowerCase()+ " is not allowed");
                 }
             }
-        } else if (config.isNaturalMobSpawnEnabled()) {
+        } /*else if (config.isNaturalMobSpawnEnabled()) {
             if (!config.getNaturalSpawnExceptions().contains(entityType)) {
                 Bukkit.getLogger().info(config.naturalSpawnDenied());
                 event.setCancelled(true);
             }
+        }*/
+        naturalMobSpawn(event);
+    }
+    // Method to check if the spawned entity is exempted from spawning restrictions
+
+    /**
+     * Handles Natural spawning of mobs
+     *
+     * @param event
+     */
+    private void naturalMobSpawn(CreatureSpawnEvent event) {
+        EntityType entityType = event.getEntityType();
+        for (NaturalMobSpawnException nt : config.getNaturalMobSpawnExceptions()) {
+            List<String> worlds = nt.getWorlds();
+            List<String> mobs = nt.getMobs();
+            boolean isEnabled = nt.isEnabled();
+            // Check if the current world is in the list of exempted worlds
+            if (worlds.contains(event.getLocation().getWorld().getName())) {
+                // Check if the spawned entity type is in the list of exempted mobs
+                if (mobs.contains(entityType.name())) {
+                    // Check if the exception is enabled
+                    if (isEnabled) {
+                        // If all conditions are met, allow the entity to spawn
+                        return;
+                    } else {
+                        // If the exception is not enabled, cancel the entity spawn
+                        event.setCancelled(true);
+                        if (config.isBroadcastMessagesToPlayers()) {
+                            event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.naturalSpawnDenied()));
+                        }
+                        if (config.logMessagesToConsole()) {
+                            Bukkit.getLogger().info("Spawning of " + entityType + " is not allowed in world " + event.getLocation().getWorld().getName());
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        // If the entity is not exempted, cancel its spawn and notify players
+        event.setCancelled(true);
+        if (config.isBroadcastMessagesToPlayers()) {
+            event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.naturalSpawnDenied()));
+        }
+        if (config.logMessagesToConsole()) {
+            Bukkit.getLogger().info("Spawning of " + entityType + " is not allowed.");
         }
     }
 }

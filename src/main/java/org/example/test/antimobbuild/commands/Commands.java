@@ -21,8 +21,8 @@ public class Commands implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("try amb reload");
-            return true;
+            // sends command usage
+            return false;
         }
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("antimobbuild.reload")) {
