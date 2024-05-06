@@ -3,14 +3,12 @@ package org.example.test.antimobbuild;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.example.test.antimobbuild.exeptions.NaturalMobSpawnException;
 import org.example.test.antimobbuild.exeptions.SpawnFromEggsException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Config {
     private final AntiMobBuild plugin;
@@ -28,8 +26,6 @@ public class Config {
         messageFile = new File(plugin.getDataFolder(), "messages.yml");
         loadConfig();
         loadMessages();
-        naturalMobSpawnExceptions();
-        spawnFromEggsExepetion();
     }
 
     public void naturalMobSpawnExceptions() {
@@ -50,7 +46,7 @@ public class Config {
     }
 
 
-    public void spawnFromEggsExepetion() {
+    public void spawnFromEggsException() {
         List<SpawnFromEggsException> exceptions = new ArrayList<>();
         ConfigurationSection section = config.getConfigurationSection("can-spawn-from-eggs");
         if (section != null) {
@@ -73,6 +69,13 @@ public class Config {
         }
 
         config = YamlConfiguration.loadConfiguration(configFile); // Load the config into memory
+        try {
+            naturalMobSpawnExceptions();
+            spawnFromEggsException();
+        } catch (Exception e) {
+            // Log an error message indicating the exception
+            plugin.getLogger().severe("An error occurred while handling mob spawn exceptions: " + e.getMessage());
+        }
     }
 
     private void loadMessages() {
@@ -107,9 +110,6 @@ public class Config {
         return config.getBoolean("can-spawn-silver-fish-on-blocks");
     }
 
-    public boolean isCanSpawnFromEggs() {
-        return config.getBoolean("can-spawn-from-eggs");
-    }
 
     public boolean isMessagePlayer() {
         return config.getBoolean("message-player");
@@ -121,22 +121,6 @@ public class Config {
 
     public boolean logMessagesToConsole() {
         return config.getBoolean("log-messages-to-console");
-    }
-
-    public boolean isNaturalMobSpawnEnabled() {
-        return config.getBoolean("natural-mob-spawn.enabled");
-    }
-
-    public List<EntityType> getNaturalSpawnExceptions() {
-        return config.getStringList("natural-mob-spawn.exceptions").stream()
-                .map(EntityType::valueOf)
-                .collect(Collectors.toList());
-    }
-
-    public List<EntityType> getSpawnExceptions() {
-        return config.getStringList("can-spawn-from-eggs.exceptions").stream()
-                .map(EntityType::valueOf)
-                .collect(Collectors.toList());
     }
 
     public String ironGolemSpawnDenied() {
@@ -179,8 +163,6 @@ public class Config {
         return messageFile;
     }
     // getters methods
-
-
     public List<NaturalMobSpawnException> getNaturalMobSpawnExceptions() {
         return naturalMobSpawnExceptions;
     }

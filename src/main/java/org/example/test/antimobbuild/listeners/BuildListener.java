@@ -22,67 +22,42 @@ public class BuildListener implements Listener {
     public void onCreatureCreate(CreatureSpawnEvent event) {
         CreatureSpawnEvent.SpawnReason spawnReason = event.getSpawnReason();
         EntityType entityType = event.getEntityType();
-        if (entityType == EntityType.IRON_GOLEM && spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_IRONGOLEM) {
+        if (entityType == EntityType.IRON_GOLEM &&
+                spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_IRONGOLEM) {
             if (!config.isCanCreateIronGolem()) {
-                event.setCancelled(true);
+                cancelSpawnEvent(event, config.ironGolemSpawnDenied()
+                        , "IRONGOLEM spawning is not allowed.");
 
-                if (config.isBroadcastMessagesToPlayers()) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.ironGolemSpawnDenied()));
-                }
-                if (config.logMessagesToConsole()) {
-                    Bukkit.getLogger().info("IRONGOLEM spawning is not allowed.");
-                }
             }
-        } else if (entityType == EntityType.SNOWMAN && spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_SNOWMAN) {
+        } else if (entityType == EntityType.SNOWMAN &&
+                spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_SNOWMAN) {
             if (!config.isCanCreateSnowMan()) {
-                event.setCancelled(true);
+                cancelSpawnEvent(event, config.snowmanSpawnDenied()
+                        , "SNOWMAN spawning is not allowed.");
 
-                if (config.isBroadcastMessagesToPlayers()) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.snowmanSpawnDenied()));
-                }
-                if (config.logMessagesToConsole()) {
-                    Bukkit.getLogger().info("SNOWMAN spawning is not allowed.");
-                }
             }
-        } else if (entityType == EntityType.WITHER && spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_WITHER) {
+        } else if (entityType == EntityType.WITHER &&
+                spawnReason == CreatureSpawnEvent.SpawnReason.BUILD_WITHER) {
             if (!config.isCanCreateWither()) {
-                event.setCancelled(true);
-                if (config.isBroadcastMessagesToPlayers()) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.witherSpawnDenied()));
-                }
-                if (config.logMessagesToConsole()) {
-                    Bukkit.getLogger().info("WITHER spawning is not allowed.");
-                }
+                cancelSpawnEvent(event, config.witherSpawnDenied(),
+                        "WITHER spawning is not allowed.");
             }
-        } else if (entityType == EntityType.VILLAGER && spawnReason == CreatureSpawnEvent.SpawnReason.CURED) {
+        } else if (entityType == EntityType.VILLAGER &&
+                spawnReason == CreatureSpawnEvent.SpawnReason.CURED) {
             if (!config.isCanCureVillager()) {
-                event.setCancelled(true);
-                if (config.isBroadcastMessagesToPlayers()) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.villagerCureDenied()));
-                }
-                if (config.logMessagesToConsole()) {
-                    Bukkit.getLogger().info("VILLAGER curing is not allowed.");
-                }
+                cancelSpawnEvent(event, config.villagerCureDenied(),
+                        "VILLAGER curing is not allowed.");
             }
-        } else if (entityType == EntityType.VILLAGER && spawnReason == CreatureSpawnEvent.SpawnReason.INFECTION) {
+        } else if (entityType == EntityType.VILLAGER &&
+                spawnReason == CreatureSpawnEvent.SpawnReason.INFECTION) {
             if (!config.isCanInfectVillager()) {
-                event.setCancelled(true);
-                if (config.isBroadcastMessagesToPlayers()) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.villagerInfectionDenied()));
-                }
-                if (config.logMessagesToConsole()) {
-                    Bukkit.getLogger().info("VILLAGER infection is not allowed.");
-                }
+                cancelSpawnEvent(event, config.villagerInfectionDenied(),
+                        "VILLAGER infection is not allowed.");
             }
         } else if (entityType == EntityType.SILVERFISH && spawnReason == CreatureSpawnEvent.SpawnReason.SILVERFISH_BLOCK) {
             if (!config.isCanSpawnSilverFishOnBlocks()) {
-                event.setCancelled(true);
-                if (config.isBroadcastMessagesToPlayers()) {
-                    event.getEntity().getWorld().getPlayers().forEach(player -> player.sendMessage(config.silverfishSpawnDenied()));
-                }
-                if (config.logMessagesToConsole()) {
-                    Bukkit.getLogger().info("Spawning silverfigh in block  is not allowed.");
-                }
+                cancelSpawnEvent(event, config.silverfishSpawnDenied(),
+                        "Spawning silverfigh in block  is not allowed.");
             }
         } else if (spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG) {
             spawnFromEggs(event);
@@ -91,6 +66,13 @@ public class BuildListener implements Listener {
         }
     }
 
+    /**
+     * Handles spawn od mobs from eggs<br>
+     * each world has its own {@link List<String> mobs}
+     *
+     * @param event The CreatureSpawnEvent triggered when a creature is spawned.
+     * @see SpawnFromEggsException
+     */
     private void spawnFromEggs(CreatureSpawnEvent event) {
         EntityType entityType = event.getEntityType();
         List<SpawnFromEggsException> exceptions = config.getSpawnFromEggsExceptions();
@@ -131,8 +113,9 @@ public class BuildListener implements Listener {
 
 
     /**
-     * Handles natural spawning of mobs based on exceptions specified in the configuration.
-     *
+     * Handles natural mob spawning<br>
+     * each world has its own {@link List<String> mobs}
+     * @see SpawnFromEggsException
      * @param event The CreatureSpawnEvent triggered when a creature is spawned.
      */
     private void naturalMobSpawn(CreatureSpawnEvent event) {
@@ -173,6 +156,12 @@ public class BuildListener implements Listener {
         }
     }
 
+    /**
+     * Helper method to cancel events and send messages
+     * @param event the event that will be canceled
+     * @param broadcastMessage the message to broadcast to players
+     * @param logMessage the log message
+     */
     private void cancelSpawnEvent(CreatureSpawnEvent event, String broadcastMessage, String logMessage) {
         try {
             event.setCancelled(true);

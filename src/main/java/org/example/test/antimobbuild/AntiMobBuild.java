@@ -2,6 +2,8 @@ package org.example.test.antimobbuild;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.example.test.antimobbuild.commands.Commands;
+import org.example.test.antimobbuild.exeptions.NaturalMobSpawnException;
+import org.example.test.antimobbuild.exeptions.SpawnFromEggsException;
 import org.example.test.antimobbuild.listeners.BuildListener;
 
 import java.util.Objects;
@@ -20,14 +22,29 @@ public final class AntiMobBuild extends JavaPlugin {
         // Register the commands
         Objects.requireNonNull(getCommand("amb")).setExecutor(new Commands(config));
 
-        // Print a cool message to the console
-        getLogger().info("*********************************************");
-        getLogger().info("*                                           *");
-        getLogger().info("*            AntiMobBuild Plugin            *");
-        getLogger().info("*                                           *");
-        getLogger().info("*********************************************");
+        // Print activated configuration settings to the console
+        getLogger().info("Activated Configuration Settings:");
+        getLogger().info("Can create Iron Golem: " + config.isCanCreateIronGolem());
+        getLogger().info("Can create Snowman: " + config.isCanCreateSnowMan());
+        getLogger().info("Can create Wither: " + config.isCanCreateWither());
+        getLogger().info("Can cure Villager: " + config.isCanCureVillager());
+        getLogger().info("Can infect Villager: " + config.isCanInfectVillager());
+        getLogger().info("Can spawn Silverfish on blocks: " + config.isCanSpawnSilverFishOnBlocks());
 
-        // Other plugin initialization code
+        // Print activated exceptions for natural mob spawn and exceptions for spawning from eggs
+        getLogger().info("Natural Mob Spawn Exceptions:");
+        for (NaturalMobSpawnException exception : config.getNaturalMobSpawnExceptions()) {
+            getLogger().info("World: " + exception.getWorld());
+            getLogger().info("Enabled: " + exception.isEnabled());
+            getLogger().info("Exceptions: " + exception.getMobs());
+        }
+
+        getLogger().info("Spawn From Eggs Exceptions:");
+        for (SpawnFromEggsException exception : config.getSpawnFromEggsExceptions()) {
+            getLogger().info("World: " + exception.getWorld());
+            getLogger().info("Enabled: " + exception.isEnabled());
+            getLogger().info("Exceptions: " + exception.getMobs());
+        }
     }
 
     @Override
