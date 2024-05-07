@@ -9,11 +9,11 @@ import org.example.test.antimobbuild.Config;
 
 import java.io.File;
 
-public class Commands implements CommandExecutor {
+public class MyCommand implements CommandExecutor {
     private final File configFile;
     private final File messageFile;
 
-    public Commands(Config config) {
+    public MyCommand(Config config) {
         this.configFile = config.getConfigFile();
         this.messageFile = config.getMessageFile();
     }

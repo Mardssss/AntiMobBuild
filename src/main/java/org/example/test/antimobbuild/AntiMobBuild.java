@@ -1,12 +1,11 @@
 package org.example.test.antimobbuild;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.example.test.antimobbuild.commands.Commands;
+import org.example.test.antimobbuild.commands.MyCommand;
+import org.example.test.antimobbuild.commands.MyTabComplete;
 import org.example.test.antimobbuild.exeptions.NaturalMobSpawnException;
 import org.example.test.antimobbuild.exeptions.SpawnFromEggsException;
 import org.example.test.antimobbuild.listeners.BuildListener;
-
-import java.util.Objects;
 
 public final class AntiMobBuild extends JavaPlugin {
     Config config;
@@ -20,7 +19,8 @@ public final class AntiMobBuild extends JavaPlugin {
         getServer().getPluginManager().registerEvents(buildListener, this);
 
         // Register the commands
-        Objects.requireNonNull(getCommand("amb")).setExecutor(new Commands(config));
+        getCommand("amb").setExecutor(new MyCommand(config));
+        getCommand("amb").setTabCompleter(new MyTabComplete());
 
         // Print activated configuration settings to the console
         getLogger().info("Activated Configuration Settings:");

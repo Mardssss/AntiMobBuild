@@ -11,7 +11,3 @@ commands:
     aliases: [antimobbuild]
     tab-completions:
       - reload
-permissions:
-  antimobbuild.reload:
-    description: Permission to reload the configuration
-    default: op
