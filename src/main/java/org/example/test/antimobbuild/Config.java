@@ -24,8 +24,8 @@ public class Config {
         this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         messageFile = new File(plugin.getDataFolder(), "messages.yml");
-        loadConfig();
-        loadMessages();
+        loadConfig(plugin);
+        loadMessages(plugin);
     }
 
     public void naturalMobSpawnExceptions() {
@@ -63,7 +63,7 @@ public class Config {
         this.spawnFromEggsExceptions = exceptions;
     }
 
-    private void loadConfig() {
+    private void loadConfig(AntiMobBuild plugin) {
         if (!configFile.exists()) {
             plugin.saveResource("config.yml", false); // Save default config if doesn't exist
         }
@@ -78,7 +78,7 @@ public class Config {
         }
     }
 
-    private void loadMessages() {
+    private void loadMessages(AntiMobBuild plugin) {
         if (!messageFile.exists()) {
             plugin.saveResource("messages.yml", false); // Save default config if doesn't exist
         }
