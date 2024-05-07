@@ -19,8 +19,10 @@ public final class AntiMobBuild extends JavaPlugin {
         getServer().getPluginManager().registerEvents(buildListener, this);
 
         // Register the commands
-        getCommand("amb").setExecutor(new MyCommand(config));
-        getCommand("amb").setTabCompleter(new MyTabComplete());
+        MyCommand command = new MyCommand(config);
+        MyTabComplete tabComplete = new MyTabComplete();
+        getCommand("amb").setExecutor(command);
+        getCommand("amb").setTabCompleter(tabComplete);
 
         // Print activated configuration settings to the console
         getLogger().info("Activated Configuration Settings:");
